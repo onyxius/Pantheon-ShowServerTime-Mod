@@ -1,4 +1,9 @@
-# Pantheon Server Time Mod
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9b4e7399-8524-4a17-8032-31c0c4d1a219" alt="Pantheon_708" width="25%" />
+  <img src="https://github.com/user-attachments/assets/c5c5d249-8ca4-41cc-9bca-387cfe5cca08" alt="Pantheon_707" width="30%" />
+</p>
+
+## Pantheon Server Time Mod
 
 A mod for Pantheon: Rise of the Fallen that displays the current in-game server time on your UI, positioned intelligently to work seamlessly with or without the server name display mod.
 
