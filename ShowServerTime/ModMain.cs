@@ -1,10 +1,8 @@
 using MelonLoader;
 using UnityEngine;
 using Il2CppTMPro;
-using UnityEngine.UI;
-using System;
 using Il2Cpp;
-using System.Linq;
+using Object = UnityEngine.Object;
 
 namespace ShowServerTime;
 
@@ -68,14 +66,16 @@ public class ModMain : MelonMod
     {
         // Remove the old time display if it exists
         if (textObject != null)
-            GameObject.Destroy(textObject);
+        {
+            Object.Destroy(textObject);
+        }
 
         // Check if the ShowServerAndShard mod is loaded
-        bool hasServerNameMod = MelonMod.RegisteredMelons.Any(m => m.Info.Name == "ShowServerAndShard");
+        var hasServerNameMod = MelonMod.RegisteredMelons.Any(m => m.Info.Name == "ShowServerAndShard");
         // Default parent is the compass panel
-        Transform parentTransform = compassPanel;
+        var parentTransform = compassPanel;
         // Default position: 5 units below the compass (matches server name mod default)
-        Vector2 anchoredPosition = new Vector2(0, -5);
+        var anchoredPosition = new Vector2(0, -5);
 
         if (hasServerNameMod)
         {
@@ -103,7 +103,7 @@ public class ModMain : MelonMod
         textMeshPro.alignment = TextAlignmentOptions.Center;
 
         // Set up the RectTransform to position the text correctly
-        RectTransform rectTransform = textMeshPro.rectTransform;
+        var rectTransform = textMeshPro.rectTransform;
         rectTransform.anchorMin = new Vector2(0.5f, 0f);  // Anchor to bottom center
         rectTransform.anchorMax = new Vector2(0.5f, 0f);
         rectTransform.pivot = new Vector2(0.5f, 1f);      // Pivot at top center
