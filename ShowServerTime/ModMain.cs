@@ -24,21 +24,6 @@ public class ModMain : MelonMod
     private static float timeSinceLastUpdate = 0f;
 
     /// <summary>
-    /// Called when the mod is initialized
-    /// </summary>
-    public override void OnInitializeMelon()
-    {
-    }
-
-    /// <summary>
-    /// Called when a new scene is loaded
-    /// </summary>
-    public override void OnSceneWasLoaded(int buildIndex, string sceneName)
-    {
-        // UI creation moved to CreateTimeDisplay, called from UIPanelHooks
-    }
-
-    /// <summary>
     /// Called every frame
     /// </summary>
     public override void OnUpdate()
