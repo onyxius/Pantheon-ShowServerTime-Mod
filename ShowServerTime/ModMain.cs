@@ -1,10 +1,8 @@
 using MelonLoader;
 using UnityEngine;
 using Il2CppTMPro;
-using UnityEngine.UI;
-using System;
 using Il2Cpp;
-using System.Linq;
+using Object = UnityEngine.Object;
 
 namespace ShowServerTime;
 
@@ -18,38 +16,23 @@ public class ModMain : MelonMod
     public const string ModVersion = "1.0.0";
     
     // UI Elements
-    private static GameObject textObject;        // The GameObject that holds our text display
-    private static TextMeshProUGUI textMeshPro;  // The TextMeshPro component for rendering text
-    private static float updateInterval = 1.0f;  // Update interval in seconds
-    private static float timeSinceLastUpdate = 0f;
-
-    /// <summary>
-    /// Called when the mod is initialized
-    /// </summary>
-    public override void OnInitializeMelon()
-    {
-    }
-
-    /// <summary>
-    /// Called when a new scene is loaded
-    /// </summary>
-    public override void OnSceneWasLoaded(int buildIndex, string sceneName)
-    {
-        // UI creation moved to CreateTimeDisplay, called from UIPanelHooks
-    }
+    private const float UpdateInterval = 1.0f; // Update interval in seconds
+    private static GameObject? _textObject;        // The GameObject that holds our text display
+    private static TextMeshProUGUI? _textMeshPro;  // The TextMeshPro component for rendering text
+    private static float _timeSinceLastUpdate;
 
     /// <summary>
     /// Called every frame
     /// </summary>
     public override void OnUpdate()
     {
-        if (textMeshPro != null)
+        if (_textMeshPro != null)
         {
-            timeSinceLastUpdate += Time.deltaTime;
-            if (timeSinceLastUpdate >= updateInterval)
+            _timeSinceLastUpdate += Time.deltaTime;
+            if (_timeSinceLastUpdate >= UpdateInterval)
             {
                 UpdateTimeDisplay();
-                timeSinceLastUpdate = 0f;
+                _timeSinceLastUpdate = 0f;
             }
         }
     }
@@ -66,8 +49,8 @@ public class ModMain : MelonMod
             var minute = TimeController.previousMinute;
             
             // Format the time display
-            if (textMeshPro != null)
-                textMeshPro.text = $"Time: {hour:D2}:{minute:D2}";
+            if (_textMeshPro != null)
+                _textMeshPro.text = $"Time: {hour:D2}:{minute:D2}";
         }
         catch (Exception)
         {
@@ -82,15 +65,17 @@ public class ModMain : MelonMod
     public static void CreateTimeDisplay(Transform compassPanel)
     {
         // Remove the old time display if it exists
-        if (textObject != null)
-            GameObject.Destroy(textObject);
+        if (_textObject != null)
+        {
+            Object.Destroy(_textObject);
+        }
 
         // Check if the ShowServerAndShard mod is loaded
-        bool hasServerNameMod = MelonMod.RegisteredMelons.Any(m => m.Info.Name == "ShowServerAndShard");
+        var hasServerNameMod = MelonMod.RegisteredMelons.Any(m => m.Info.Name == "ShowServerAndShard");
         // Default parent is the compass panel
-        Transform parentTransform = compassPanel;
+        var parentTransform = compassPanel;
         // Default position: 5 units below the compass (matches server name mod default)
-        Vector2 anchoredPosition = new Vector2(0, -5);
+        var anchoredPosition = new Vector2(0, -5);
 
         if (hasServerNameMod)
         {
@@ -106,19 +91,19 @@ public class ModMain : MelonMod
         }
 
         // Create a new GameObject for the time display
-        textObject = new GameObject("TimeDisplay");
+        _textObject = new GameObject("TimeDisplay");
         // Set its parent to either the compass panel or the server name text
-        textObject.transform.SetParent(parentTransform, false);
+        _textObject.transform.SetParent(parentTransform, false);
 
         // Add and configure the TextMeshPro component for rendering the time
-        textMeshPro = textObject.AddComponent<TextMeshProUGUI>();
-        textMeshPro.text = "Time: 00:00";
-        textMeshPro.fontSize = 12;
-        textMeshPro.color = Color.yellow;
-        textMeshPro.alignment = TextAlignmentOptions.Center;
+        _textMeshPro = _textObject.AddComponent<TextMeshProUGUI>();
+        _textMeshPro.text = "Time: 00:00";
+        _textMeshPro.fontSize = 12;
+        _textMeshPro.color = Color.yellow;
+        _textMeshPro.alignment = TextAlignmentOptions.Center;
 
         // Set up the RectTransform to position the text correctly
-        RectTransform rectTransform = textMeshPro.rectTransform;
+        var rectTransform = _textMeshPro.rectTransform;
         rectTransform.anchorMin = new Vector2(0.5f, 0f);  // Anchor to bottom center
         rectTransform.anchorMax = new Vector2(0.5f, 0f);
         rectTransform.pivot = new Vector2(0.5f, 1f);      // Pivot at top center
